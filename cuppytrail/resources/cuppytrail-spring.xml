@@ -92,4 +92,5 @@
 	  <property name="stadiumService" ref="stadiumService" />
 	</bean>	
 			
+	<bean id="sendRankingJob" class="de.hybris.platform.cuppytrail.jobs.SendRankingJob" autowire="byName"/>
 </beans>
