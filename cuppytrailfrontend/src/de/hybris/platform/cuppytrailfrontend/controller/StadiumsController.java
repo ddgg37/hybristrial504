@@ -2,7 +2,6 @@ package de.hybris.platform.cuppytrailfrontend.controller;
 
 import de.hybris.platform.cuppytrail.data.StadiumData;
 import de.hybris.platform.cuppytrail.facades.StadiumFacade;
-import de.hybris.platform.cuppytrailfrontend.StadiumsNameEncoded;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -24,7 +23,7 @@ public class StadiumsController
 	@RequestMapping(value = "/stadiums")
 	public String showStadiums(final Model model)
 	{
-		final List<StadiumData> stadiums = stadiumFacade.getStadiums();
+		final List<StadiumData> stadiums = stadiumFacade.getStadiums("stadiumListFormat");
 		model.addAttribute("stadiums", stadiums);
 		return "StadiumListing";
 	}
@@ -33,8 +32,8 @@ public class StadiumsController
 	public String showStadiumDetails(@PathVariable String stadiumName, final Model model) throws UnsupportedEncodingException
 	{
 		stadiumName = URLDecoder.decode(stadiumName, "UTF-8");
-		final StadiumData stadium = stadiumFacade.getStadium(stadiumName);
-		stadium.setName(StadiumsNameEncoded.getNameEncoded(stadium.getName()));
+		final StadiumData stadium = stadiumFacade.getStadium(stadiumName, "stadiumDetailsFormat");
+		stadium.setName(stadium.getName());//StadiumsNameEncoded.getNameEncoded(stadium.getName()));
 		model.addAttribute("stadium", stadium);
 		return "StadiumDetails";
 	}
