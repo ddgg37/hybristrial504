@@ -1,0 +1,12 @@
+button.yw-toggle-advanced-search {
+    background-color: #000000;
+}
+
+.yw-toggle-advanced-search {
+    width: 100px;
+}
+
+div.ye-default-reference-editor-item-container, div.ye-default-reference-editor-selected-item-container
+{
+    background: none repeat scroll 0 0 #ffff00;
+}

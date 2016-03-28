@@ -1,0 +1,9 @@
+@IMPORT url("login.css");
+
+body {
+	background: green;
+}
+
+.login_grid {
+	background: url("images/my_bg.png") no-repeat;
+}

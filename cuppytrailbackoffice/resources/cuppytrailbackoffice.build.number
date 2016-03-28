@@ -1,0 +1,9 @@
+#Ant properties
+#Tue May 05 14:59:48 CEST 2015
+builddate=20150505 1459
+description=cuppytrailbackoffice
+name=cuppytrailbackoffice
+releasedate=20150326 1326
+vendor=hybris
+version=5.4.0.2
+version.api=5.4.0
