@@ -1,7 +1,7 @@
 /*
  * ----------------------------------------------------------------
  * --- WARNING: THIS FILE IS GENERATED AND WILL BE OVERWRITTEN! ---
- * --- Generated at 28-Mar-2016 12:43:41                        ---
+ * --- Generated at 09-Apr-2016 20:25:00                        ---
  * ----------------------------------------------------------------
  */
 package com.hybris.cuppytrailbackoffice.constants;
