@@ -1,7 +1,7 @@
 /*
  * ----------------------------------------------------------------
  * --- WARNING: THIS FILE IS GENERATED AND WILL BE OVERWRITTEN! ---
- * --- Generated at 09-Apr-2016 20:25:00                        ---
+ * --- Generated at 27-Apr-2016 13:24:56                        ---
  * ----------------------------------------------------------------
  */
 package com.hybris.cuppytrailbackoffice.jalo;
