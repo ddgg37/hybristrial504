@@ -27,6 +27,6 @@ public class DynamicHybrisCustomerAttributeBean implements DynamicAttributeHandl
 	@Override
 	public void set(final CustomerModel model, final Boolean value)
 	{
-		//throw new UnsupportedOperationException("Not supported yet.");
+		throw new UnsupportedOperationException("Not supported yet.");
 	}
 }
