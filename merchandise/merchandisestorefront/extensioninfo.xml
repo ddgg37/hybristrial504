@@ -14,7 +14,8 @@
 
 	<extension abstractclassprefix="Generated" classprefix="MerchandiseStorefront" name="merchandisestorefront">
 		
-		<requires-extension name="randomimageaddon"/>
+		<requires-extension name="merchandisecheckoutaddon"/>
+<requires-extension name="randomimageaddon"/>
 <requires-extension name="b2ccheckoutaddon"/>
 		<requires-extension name="btg"/>
 		<requires-extension name="acceleratorstorefrontcommons"/>
