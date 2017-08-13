@@ -22,4 +22,5 @@ public interface MerchandisecheckoutaddonControllerConstants
 
 	String GiftWrapPage = ADDON_PREFIX + "pages/checkout/multi/giftWrapPage";
 
+	String ChooseDeliveryMethodPage = ADDON_PREFIX + "pages/checkout/multi/chooseDeliveryMethod";
 }
