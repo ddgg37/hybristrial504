@@ -371,17 +371,16 @@ INSERT_UPDATE ContentSlotForPage                   ; $contentCV[unique=true]    
                                                    ;                            ; Section2B-TermsAndConditions                         ; Section2B                                                                                                                                                                                                      ;                                                                                                                                                                                                                                              ; Section2BSlot-TermsAndConditions                                                                                                                                                 ;                                          ;                                             ;
                                                      
  ########################################
-  
-  
+
  INSERT_UPDATE JspIncludeComponent;$contentCV[unique=true];uid[unique=true];name;page;actions(uid,$contentCV);&componentRef
 ;;AccountPaymentDetailsComponent;Account Payment Details Component;accountPaymentInfoPage.jsp;;AccountPaymentDetailsComponent
 ;;AccountOrderDetailsHeadlineComponent;Account Order Details Headline Component;accountOrderDetailHeadline.jsp;;AccountOrderDetailsHeadlineComponent
 ;;AccountOrderDetailsTotalsComponent;Account Order Details Order Totals Component;accountOrderDetailOrderTotals.jsp;;AccountOrderDetailsTotalsComponent
 ;;AccountOrderDetailsShippingComponent;Account Order Details Shipping Info Component;accountOrderDetailShippingInfo.jsp;;AccountOrderDetailsShippingComponent
 ;;AccountOrderDetailsItemsComponent;Account Order Details Items Info Component;accountOrderDetailItems.jsp;;AccountOrderDetailsItemsComponent
-;;AccountOrderHistoryComponent;Account History Component;accountOrderHistoryPage.jsp;ViewOrderAction;AccountOrderHistoryComponent
 ;;AccountProfileComponent;Account Profile Component;accountProfilePage.jsp;;AccountProfileComponent
 ;;AccountAddressBookComponent;Account Address Book Component;accountAddressBookPage.jsp;;AccountAddressBookComponent
+;;AccountOrderHistoryComponent;Account History Component;accountOrderHistoryPage.jsp;ViewOrderAction,CancelOrderAction;AccountOrderHistoryComponent
 ;;AccountAddEditAddressComponent;Account Add Edit Address Component;accountEditAddressPage.jsp;;AccountAddEditAddressComponent
 ;;UpdatePasswordComponent;Update Password Component;accountChangePasswordPage.jsp;;UpdatePasswordComponent
 ;;UpdateProfileComponent;Update Profile Component;accountProfileEditPage.jsp;;UpdateProfileComponent
@@ -397,6 +396,11 @@ INSERT_UPDATE ContentSlotForPage                   ; $contentCV[unique=true]    
 ;;NewCustomerCheckoutLoginComponent;New Customer Checkout Login Component;checkoutNewCustomerLogin.jsp;;NewCustomerCheckoutLoginComponent
 ;;ReturningCustomerCheckoutLoginComponent;Returning Customer Checkout Login Component;checkouReturningCustomerLogin.jsp;;ReturningCustomerCheckoutLoginComponent
 ;;GuestCheckoutLoginComponent;Guest Checkout Login Component;checkoutGuestLogin.jsp;;GuestCheckoutLoginComponent
+
+# CMS Cancel Order Action
+INSERT_UPDATE CancelOrderAction;$contentCV[unique=true];uid[unique=true];url;name;restrictions(uid,$contentCV);&actionRef
+;;CancelOrderAction;/my-account/order/cancel/{orderCode};Cancel Order Action;ActionRestriction;CancelOrderAction
+
 INSERT_UPDATE BreadcrumbComponent;$contentCV[unique=true];uid[unique=true];name;&componentRef
 ;;breadcrumbComponent;Breadcrumb CMS Component;breadcrumbComponent
 # CMS View Order Action
@@ -547,3 +551,4 @@ INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active;c
 ;;Section2ASlot-Homepage;Section2A Slot for Homepage;true;RandomImage1
 ;;Section2BSlot-Homepage;Section2B Slot for Homepage;true;RandomImage2
 ;;Section2CSlot-Homepage;Section2C Slot for Homepage;true;RandomImage3
+

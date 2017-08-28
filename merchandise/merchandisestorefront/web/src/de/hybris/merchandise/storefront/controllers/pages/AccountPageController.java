@@ -9,10 +9,13 @@
  * Information and shall use it only in accordance with the terms of the
  * license agreement you entered into with hybris.
  *
- *  
+ *
  */
 package de.hybris.merchandise.storefront.controllers.pages;
 
+import de.hybris.merchandise.facades.order.OrderCancelFacade;
+import de.hybris.merchandise.facades.order.data.OrderCancelResultData;
+import de.hybris.merchandise.storefront.controllers.ControllerConstants;
 import de.hybris.platform.acceleratorstorefrontcommons.annotations.RequireHardLogIn;
 import de.hybris.platform.acceleratorstorefrontcommons.breadcrumb.Breadcrumb;
 import de.hybris.platform.acceleratorstorefrontcommons.breadcrumb.ResourceBreadcrumbBuilder;
@@ -49,7 +52,6 @@ import de.hybris.platform.commerceservices.search.pagedata.PageableData;
 import de.hybris.platform.commerceservices.search.pagedata.SearchPageData;
 import de.hybris.platform.servicelayer.exceptions.UnknownIdentifierException;
 import de.hybris.platform.util.Config;
-import de.hybris.merchandise.storefront.controllers.ControllerConstants;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -90,6 +92,8 @@ public class AccountPageController extends AbstractSearchPageController
 	private static final String REDIRECT_TO_ADDRESS_BOOK_PAGE = REDIRECT_PREFIX + "/my-account/address-book";
 	private static final String REDIRECT_TO_PAYMENT_INFO_PAGE = REDIRECT_PREFIX + "/my-account/payment-details";
 	private static final String REDIRECT_TO_PROFILE_PAGE = REDIRECT_PREFIX + "/my-account/profile";
+	private static final String REDIRECT_TO_ORDERS = REDIRECT_PREFIX + "/my-account/orders";
+
 	/**
 	 * We use this suffix pattern because of an issue with Spring 3.1 where a Uri value is incorrectly extracted if it
 	 * contains on or more '.' characters. Please see https://jira.springsource.org/browse/SPR-6164 for a discussion on
@@ -147,6 +151,9 @@ public class AccountPageController extends AbstractSearchPageController
 
 	@Resource(name = "addressVerificationResultHandler")
 	private AddressVerificationResultHandler addressVerificationResultHandler;
+
+	@Resource(name = "orderCancelFacade")
+	private OrderCancelFacade orderCancelFacade;
 
 	protected PasswordValidator getPasswordValidator()
 	{
@@ -206,6 +213,15 @@ public class AccountPageController extends AbstractSearchPageController
 		return countryDataMap;
 	}
 
+	@RequestMapping(value = "/order/cancel/{orderCode}", method = RequestMethod.POST)
+	public String orderCancel(@PathVariable("orderCode") final String orderCode, final RedirectAttributes redirectAttributes)
+			throws CMSItemNotFoundException
+	{
+		final OrderData orderDetails = orderFacade.getOrderDetailsForCode(orderCode);
+		final OrderCancelResultData cancelResult = orderCancelFacade.cancelOrder(orderDetails);
+		redirectAttributes.addFlashAttribute("orderCancelResult", cancelResult);
+		return REDIRECT_TO_ORDERS;
+	}
 
 	@RequestMapping(value = "/addressform", method = RequestMethod.GET)
 	public String getCountryAddressForm(@RequestParam("addressCode") final String addressCode,
@@ -256,24 +272,41 @@ public class AccountPageController extends AbstractSearchPageController
 		return getViewForPage(model);
 	}
 
+
 	@RequestMapping(value = "/orders", method = RequestMethod.GET)
+
 	@RequireHardLogIn
+
 	public String orders(@RequestParam(value = "page", defaultValue = "0") final int page,
+
 			@RequestParam(value = "show", defaultValue = "Page") final ShowMode showMode,
+
 			@RequestParam(value = "sort", required = false) final String sortCode, final Model model)
+
 			throws CMSItemNotFoundException
+
 	{
+
 		// Handle paged search results
+
 		final PageableData pageableData = createPageableData(page, 5, sortCode, showMode);
+
 		final SearchPageData<OrderHistoryData> searchPageData = orderFacade.getPagedOrderHistoryForStatuses(pageableData);
+
 		populateModel(model, searchPageData, showMode);
 
 		storeCmsPageInModel(model, getContentPageForLabelOrId(ORDER_HISTORY_CMS_PAGE));
+
 		setUpMetaDataForContentPage(model, getContentPageForLabelOrId(ORDER_HISTORY_CMS_PAGE));
+
 		model.addAttribute("breadcrumbs", accountBreadcrumbBuilder.getBreadcrumbs("text.account.orderHistory"));
+
 		model.addAttribute("metaRobots", "noindex,nofollow");
+
 		return getViewForPage(model);
+
 	}
+
 
 	@RequestMapping(value = "/order/" + ORDER_CODE_PATH_VARIABLE_PATTERN, method = RequestMethod.GET)
 	@RequireHardLogIn
@@ -285,8 +318,8 @@ public class AccountPageController extends AbstractSearchPageController
 			model.addAttribute("orderData", orderDetails);
 
 			final List<Breadcrumb> breadcrumbs = accountBreadcrumbBuilder.getBreadcrumbs(null);
-			breadcrumbs.add(new Breadcrumb("/my-account/orders", getMessageSource().getMessage("text.account.orderHistory", null,
-					getI18nService().getCurrentLocale()), null));
+			breadcrumbs.add(new Breadcrumb("/my-account/orders",
+					getMessageSource().getMessage("text.account.orderHistory", null, getI18nService().getCurrentLocale()), null));
 			breadcrumbs.add(new Breadcrumb("#", getMessageSource().getMessage("text.account.order.orderBreadcrumb", new Object[]
 			{ orderDetails.getCode() }, "Order {0}", getI18nService().getCurrentLocale()), null));
 			model.addAttribute("breadcrumbs", breadcrumbs);
@@ -500,8 +533,8 @@ public class AccountPageController extends AbstractSearchPageController
 
 	@RequestMapping(value = "/update-password", method = RequestMethod.POST)
 	@RequireHardLogIn
-	public String updatePassword(final UpdatePasswordForm updatePasswordForm, final BindingResult bindingResult,
-			final Model model, final RedirectAttributes redirectAttributes) throws CMSItemNotFoundException
+	public String updatePassword(final UpdatePasswordForm updatePasswordForm, final BindingResult bindingResult, final Model model,
+			final RedirectAttributes redirectAttributes) throws CMSItemNotFoundException
 	{
 		getPasswordValidator().validate(updatePasswordForm, bindingResult);
 		if (!bindingResult.hasErrors())
@@ -569,10 +602,11 @@ public class AccountPageController extends AbstractSearchPageController
 		setUpMetaDataForContentPage(model, getContentPageForLabelOrId(ADD_EDIT_ADDRESS_CMS_PAGE));
 
 		final List<Breadcrumb> breadcrumbs = accountBreadcrumbBuilder.getBreadcrumbs(null);
-		breadcrumbs.add(new Breadcrumb("/my-account/address-book", getMessageSource().getMessage("text.account.addressBook", null,
-				getI18nService().getCurrentLocale()), null));
-		breadcrumbs.add(new Breadcrumb("#", getMessageSource().getMessage("text.account.addressBook.addEditAddress", null,
-				getI18nService().getCurrentLocale()), null));
+		breadcrumbs.add(new Breadcrumb("/my-account/address-book",
+				getMessageSource().getMessage("text.account.addressBook", null, getI18nService().getCurrentLocale()), null));
+		breadcrumbs.add(new Breadcrumb("#",
+				getMessageSource().getMessage("text.account.addressBook.addEditAddress", null, getI18nService().getCurrentLocale()),
+				null));
 		model.addAttribute("breadcrumbs", breadcrumbs);
 		model.addAttribute("metaRobots", "noindex,nofollow");
 		return getViewForPage(model);
@@ -714,10 +748,11 @@ public class AccountPageController extends AbstractSearchPageController
 		setUpMetaDataForContentPage(model, getContentPageForLabelOrId(ADD_EDIT_ADDRESS_CMS_PAGE));
 
 		final List<Breadcrumb> breadcrumbs = accountBreadcrumbBuilder.getBreadcrumbs(null);
-		breadcrumbs.add(new Breadcrumb("/my-account/address-book", getMessageSource().getMessage("text.account.addressBook", null,
-				getI18nService().getCurrentLocale()), null));
-		breadcrumbs.add(new Breadcrumb("#", getMessageSource().getMessage("text.account.addressBook.addEditAddress", null,
-				getI18nService().getCurrentLocale()), null));
+		breadcrumbs.add(new Breadcrumb("/my-account/address-book",
+				getMessageSource().getMessage("text.account.addressBook", null, getI18nService().getCurrentLocale()), null));
+		breadcrumbs.add(new Breadcrumb("#",
+				getMessageSource().getMessage("text.account.addressBook.addEditAddress", null, getI18nService().getCurrentLocale()),
+				null));
 		model.addAttribute("breadcrumbs", breadcrumbs);
 		model.addAttribute("metaRobots", "noindex,nofollow");
 		model.addAttribute("edit", Boolean.TRUE);
@@ -726,7 +761,7 @@ public class AccountPageController extends AbstractSearchPageController
 
 	/**
 	 * Method checks if address is set as default
-	 * 
+	 *
 	 * @param addressId
 	 *           - identifier for address to check
 	 * @return true if address is default, false if address is not default
@@ -803,8 +838,8 @@ public class AccountPageController extends AbstractSearchPageController
 	@RequestMapping(value = "/select-suggested-address", method = RequestMethod.POST)
 	public String doSelectSuggestedAddress(final AddressForm addressForm, final RedirectAttributes redirectModel)
 	{
-		final Set<String> resolveCountryRegions = org.springframework.util.StringUtils.commaDelimitedListToSet(Config
-				.getParameter("resolve.country.regions"));
+		final Set<String> resolveCountryRegions = org.springframework.util.StringUtils
+				.commaDelimitedListToSet(Config.getParameter("resolve.country.regions"));
 
 		final AddressData selectedAddress = new AddressData();
 		selectedAddress.setId(addressForm.getAddressId());
@@ -842,14 +877,14 @@ public class AccountPageController extends AbstractSearchPageController
 
 		if (Boolean.TRUE.equals(addressForm.getEditAddress()))
 		{
-			selectedAddress.setDefaultAddress(Boolean.TRUE.equals(addressForm.getDefaultAddress())
-					|| userFacade.getAddressBook().size() <= 1);
+			selectedAddress.setDefaultAddress(
+					Boolean.TRUE.equals(addressForm.getDefaultAddress()) || userFacade.getAddressBook().size() <= 1);
 			userFacade.editAddress(selectedAddress);
 		}
 		else
 		{
-			selectedAddress.setDefaultAddress(Boolean.TRUE.equals(addressForm.getDefaultAddress())
-					|| userFacade.isAddressBookEmpty());
+			selectedAddress
+					.setDefaultAddress(Boolean.TRUE.equals(addressForm.getDefaultAddress()) || userFacade.isAddressBookEmpty());
 			userFacade.addAddress(selectedAddress);
 		}
 
