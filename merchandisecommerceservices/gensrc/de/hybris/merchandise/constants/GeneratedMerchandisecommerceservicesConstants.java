@@ -1,7 +1,7 @@
 /*
  * ----------------------------------------------------------------
  * --- WARNING: THIS FILE IS GENERATED AND WILL BE OVERWRITTEN! ---
- * --- Generated at 28-Aug-2017 19:12:34                        ---
+ * --- Generated at 20-Sep-2017 19:09:15                        ---
  * ----------------------------------------------------------------
  *  
  * [y] hybris Platform
@@ -25,6 +25,14 @@ package de.hybris.merchandise.constants;
 public class GeneratedMerchandisecommerceservicesConstants
 {
 	public static final String EXTENSIONNAME = "merchandisecommerceservices";
+	public static class TC
+	{
+		public static final String PRODUCTQUANTITYTHRESHOLDFREEGIFTPROMOTION = "ProductQuantityThresholdFreeGiftPromotion".intern();
+	}
+	public static class Attributes
+	{
+		// no constants defined.
+	}
 	
 	protected GeneratedMerchandisecommerceservicesConstants()
 	{

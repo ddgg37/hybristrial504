@@ -19,6 +19,7 @@
 	<import resource="classpath:/merchandisecore/integration/hot-folder-store-electronics-spring.xml"/>
 	<import resource="classpath:/merchandisecore/integration/hot-folder-store-apparel-spring.xml"/>
 	<import resource="classpath:/merchandisecore/integration/hot-folder-common-spring.xml"/>
+   <import resource="classpath:/merchandisecore/integration/hot-folder-store-hybris-spring.xml"/>
 
 	<!-- SystemSetup for the MerchandiseCore -->
 	<bean id="acceleratorCoreSystemSetup" class="de.hybris.merchandise.core.setup.CoreSystemSetup"
